@@ -53,7 +53,7 @@ module.exports = class CreateCommand extends Command {
           key: uo.key,
           channel: chan.id,
           members: [msg.author.id],
-          name: args.name.value,
+          name: uo.name,
           owner: msg.author.id,
           betrayed: false
         }).run()
