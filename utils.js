@@ -1,12 +1,12 @@
 module.exports = {
-  getNumbers = (name) => {
+  getNumbers: (name) => {
     let firstBracket = name.lastIndexOf('[')
     let subbed = name.substr(firstBracket)
     let replaced = subbed.replace('[', '').replace(']', '')
     let split = replaced.split(',')
     return [parseInt(split[0]), parseInt(split[1])]
   },
-  replaceNumbers = (name, num1, num2) => {
+  replaceNumbers: (name, num1, num2) => {
     let firstBracket = name.lastIndexOf('[')
     let subbed = name.substr(firstBracket)
     let replaced = subbed.replace('[', '').replace(']', '')
