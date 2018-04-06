@@ -1,4 +1,6 @@
 const { Command } = require('../../handler')
+const { RichEmbed } = require('discord.js')
+const { Colors } = require('../../handler/Constants')
 const r = require('../../db')
 const SERVER = '431864638385291264'
 const utils = require('../../utils')
@@ -61,7 +63,16 @@ module.exports = class JoinCommand extends Command {
     let numsOwner = utils.getNumbers(owner.nickname || `${owner.user.username} [0,0]`)
     let replacedOwner = utils.replaceNumbers(owner.nickname || `${owner.user.username} [0,0]`, numsOwner[0] + 1, numsOwner[1])
     owner.setNickname(replacedOwner)
-    
+    const embed = new RichEmbed()
+    embed.setColor(Colors.green).setTitle('Circle Joined')
+    embed.setAuthor(`${msg.author.username}#${msg.author.discriminator} (${msg.author.id})`, msg.author.displayAvatarURL)
+    embed.setDescription('A circle was joined')
+    embed.addField('Circle Name', circle.name)
+    embed.addField('Circle ID', circle.id)
+    embed.addField('Owner', `<@${circle.owner}>`)
+    embed.addField('Joiner', `<@${msg.author.id}>`)
+
+    logchan.send({embed})
     return api.success('You have joined that circle.')
   }
 }

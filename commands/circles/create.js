@@ -1,6 +1,7 @@
 const { Command } = require('../../handler')
 const r = require('../../db')
-const { Guild } = require('discord.js')
+const { Guild, RichEmbed } = require('discord.js')
+const { Colors } = require('../../handler/Constants')
 const randomWords = require('random-words')
 const CIRCLES_CATEGORY = '431866855792181248'
 const SERVER = '431864638385291264'
@@ -68,6 +69,14 @@ module.exports = class CreateCommand extends Command {
         }
         chan.setParent(CIRCLES_CATEGORY)
         chan.setTopic(`ID: ${uo.words}\nKey: ${uo.key}`)
+        const embed = new RichEmbed()
+        embed.setColor(Colors.green).setTitle('Circle Created')
+        embed.setAuthor(`${msg.author.username}#${msg.author.discriminator} (${msg.author.id})`, msg.author.displayAvatarURL)
+        embed.setDescription('A circle was created')
+        embed.addField('Circle Name', ou.name)
+        embed.addField('Circle ID', ou.words)
+        embed.addField('Owner', `<@${msg.author.id}>`)
+        logchan.send({embed})
         msg.channel.send(`Your circle was created.\nYour circle's ID is: **${uo.words}**.\nYour circle's key is: \`${uo.key}\`\nGo to your circle at <#${chan.id}>`)
         usersObj[msg.author.id] = undefined
       }
