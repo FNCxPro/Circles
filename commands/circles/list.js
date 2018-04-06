@@ -13,11 +13,11 @@ module.exports = class ListCommand extends Command {
   }
   async run(args, msg, api) {
     let circles = await r.table('circles').run()
-    let buf = '--==: **Circles** :==--\n'
+    let buf = '⛔ = Betrayed\n--==: **Circles** :==--\n'
     circles.forEach((circle) => {
       let owner = msg.guild.members.get(circle.owner)
       if (!owner) return
-      buf += `\`${circle.id}\` ${circle.name} - ${owner.user.username}#${owner.user.discriminator}\n`
+      buf += `${circle.betrayed ? '⛔ ' : ''}\`${circle.id}\` ${circle.name} - ${owner.user.username}#${owner.user.discriminator}\n`
     })
     let split = Discord.Util.splitMessage(buf, {
       char: '\n',
