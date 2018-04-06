@@ -63,7 +63,6 @@ module.exports = class CreateCommand extends Command {
         let nick = member.nickname
         if (!member.nickname) {
           member.setNickname(`${member.user.username} [1,0]`)
-          nick = `${member.user.username} [1,0]`
         } else {
           member.setNickname(utils.replaceNumbers(nick, 1, ''))
         }
