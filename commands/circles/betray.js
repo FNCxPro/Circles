@@ -3,6 +3,8 @@ const r = require('../../db')
 const SERVER = '431864638385291264'
 
 const utils = require('../../utils')
+const {RichEmbed} = require('discord.js')
+const {Colors} = require('../../handler/Constants')
 
 module.exports = class BetrayCommand extends Command {
   constructor() {
@@ -47,7 +49,7 @@ module.exports = class BetrayCommand extends Command {
       betrayed: true
     }).run()
     let channel = api.handler.client.guilds.get(SERVER).channels.get(circle.channel)
-    await api.handler.client.users.get(circle.owner).send(`Your circle was betrayed with ${circle.members.length} :(`)
+    await api.handler.client.users.get(circle.owner).send(`Your circle was betrayed with ${circle.members.length} member in it :(`)
     await channel.delete()
     await api.handler.client.guilds.get(SERVER).members.get(msg.author.id).addRole('431868770760392704')
     let guild = api.handler.client.guilds.get(SERVER)
@@ -57,6 +59,15 @@ module.exports = class BetrayCommand extends Command {
     let replaced = utils.replaceNumbers(owner.nickname || `${owner.user.username} [0,0]`, 0, nums[1])
     owner.setNickname(replaced)
     
+    const embed = new RichEmbed()
+    embed.setColor(Colors.red).setTitle('Circle Betrayed')
+    embed.setAuthor(`${msg.author.username}#${msg.author.discriminator} (${msg.author.id})`, msg.author.displayAvatarURL)
+    embed.setDescription('A circle was betrayed')
+    embed.addField('Circle Name', circle.name)
+    embed.addField('Circle ID', circle.id)
+    embed.addField('Owner', `<@${owner.id}>`)
+    embed.addField('Betrayer', `<@${msg.author.id}>`)
+    logchan.send({embed})
     return api.success('The circle was betrayed.')
   }
 }
