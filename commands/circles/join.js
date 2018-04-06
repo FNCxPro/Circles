@@ -1,6 +1,7 @@
 const { Command } = require('../../handler')
 const r = require('../../db')
 const SERVER = '431864638385291264'
+const utils = require('../../utils')
 
 module.exports = class JoinCommand extends Command {
   constructor() {
@@ -50,6 +51,17 @@ module.exports = class JoinCommand extends Command {
     await channel.overwritePermissions(msg.author, {
       VIEW_CHANNEL: true
     })
+    let guild = api.handler.client.guilds.get(SERVER)
+    let member = guild.members.get(msg.author.id)
+    let nums = utils.getNumbers(member.nickname || `${member.user.username} [0,0]`)
+    let replaced = utils.replaceNumbers(member.nickname || `${member.user.username} [0,0]`, nums[0], nums[1] + 1)
+    member.setNickname(replaced)
+
+    let owner = guild.members.get(circle.owner)
+    let numsOwner = utils.getNumbers(owner.nickname || `${owner.user.username} [0,0]`)
+    let replacedOwner = utils.replaceNumbers(owner.nickname || `${owner.user.username} [0,0]`, numsOwner[0] + 1, numsOwner[1])
+    owner.setNickname(replacedOwner)
+    
     return api.success('You have joined that circle.')
   }
 }

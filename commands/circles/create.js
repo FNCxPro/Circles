@@ -9,6 +9,8 @@ String.prototype.capitalabc = function() {
   return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
 };
 
+const utils = require('../../utils')
+
 global.usersObj = {}
 
 module.exports = class CreateCommand extends Command {
@@ -57,6 +59,14 @@ module.exports = class CreateCommand extends Command {
           owner: msg.author.id,
           betrayed: false
         }).run()
+        let member = guild.members.get(msg.author.id)
+        let nick = member.nickname
+        if (!member.nickname) {
+          member.setNickname(`${member.user.username} [0,0]`)
+          nick = `${member.user.username} [1,0]`
+        } else {
+          member.setNickname(utils.replaceNumbers(nick, 1, ''))
+        }
         chan.setParent(CIRCLES_CATEGORY)
         chan.setTopic(`ID: ${uo.words}\nKey: ${uo.key}`)
         msg.channel.send(`Your circle was created.\nYour circle's ID is: **${uo.words}**.\nYour circle's key is: \`${uo.key}\`\nGo to your circle at <#${chan.id}>`)

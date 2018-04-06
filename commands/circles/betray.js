@@ -48,6 +48,13 @@ module.exports = class BetrayCommand extends Command {
     await api.handler.client.users.get(circle.owner).send(`Your circle was betrayed with ${circle.members.length} :(`)
     await channel.delete()
     await api.handler.client.guilds.get(SERVER).members.get(msg.author.id).addRole('431868770760392704')
+    let guild = api.handler.client.guilds.get(SERVER)
+    
+    let owner = guild.members.get(circle.owner)
+    let nums = utils.getNumbers(owner.nickname || `${owner.user.username} [0,0]`)
+    let replaced = utils.replaceNumbers(owner.nickname || `${owner.user.username} [0,0]`, nums[0] + 1, nums[1])
+    owner.setNickname(replaced)
+    
     return api.success('The circle was betrayed.')
   }
 }
