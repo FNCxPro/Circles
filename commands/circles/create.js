@@ -62,7 +62,7 @@ module.exports = class CreateCommand extends Command {
         let member = guild.members.get(msg.author.id)
         let nick = member.nickname
         if (!member.nickname) {
-          member.setNickname(`${member.user.username} [0,0]`)
+          member.setNickname(`${member.user.username} [1,0]`)
           nick = `${member.user.username} [1,0]`
         } else {
           member.setNickname(utils.replaceNumbers(nick, 1, ''))
