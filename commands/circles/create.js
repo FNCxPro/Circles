@@ -9,6 +9,7 @@ String.prototype.capitalabc = function() {
   return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
 };
 
+global.usersObj = {}
 
 module.exports = class CreateCommand extends Command {
   constructor() {
@@ -16,63 +17,77 @@ module.exports = class CreateCommand extends Command {
       name: 'Create',
       description: '**RUN THIS ONLY IN A DM WITH THE BOT!!!!!!!!!!!**\nCreates a new circle',
       module: 'circles',
-      args: [{
-        name: 'key',
-        type: 'string',
-        required: true,
-        description: 'The key for your circle **(IT CAN ONLY BE ONE WORD!)**'
-      }, {
-        name: 'name',
-        type: 'string',
-        multiword: true,
-        required: true,
-        description: 'A multi word name for your circle.'
-      }],
       ownerOnly: false,
-      usage: 'create <key> <name>'
+      usage: 'create'
     })
+  }
+  postConstruct(handler) {
+    global.createHook = async (msg) => {
+      /**
+       * @type {Guild}
+       */
+      const guild = api.handler.client.guilds.get(SERVER)
+      let uo = usersObj[msg.author.id]
+      if (typeof uo !== 'object' || !uo || msg.channel.type !== 'dm') return
+      if (uo.stage === 0) {
+        usersObj.name = msg.content
+        msg.channel.send('Please type in the desired key for your Circle and press enter.')
+        uo.stage = 1
+        usersObj[msg.author.id] = uo
+      } else if (uo.stage === 1) {
+        uo.key = msg.content
+        uo.stage = 2
+        usersObj[msg.author.id] = uo
+        const chan = await guild.createChannel(uo.name.replaceAll(' ', '-'), 'text', [
+          {
+            deny: ['VIEW_CHANNEL'],
+            id: SERVER
+          },
+          {
+            allow: ['VIEW_CHANNEL'],
+            id: msg.author.id
+          }
+        ])
+        await r.table('circles').insert({
+          id: uo.words,
+          key: uo.key,
+          channel: chan.id,
+          members: [msg.author.id],
+          name: args.name.value,
+          owner: msg.author.id,
+          betrayed: false
+        }).run()
+        chan.setParent(CIRCLES_CATEGORY)
+        chan.setTopic(`ID: ${words}\nKey: ${uo.key}`)
+        msg.channel.send(`Your circle was created.\nYour circle's ID is: **${words}**.\nYour circle's key is: \`${uo.key}\`\nGo to your circle at <#${chan.id}>`)
+        usersObj[msg.author.id] = undefined
+      }
+    }
+    handler.client.on('message', createHook)
   }
   async run(args, msg, api) {
     if (msg.channel.type !== 'dm') {
       await msg.delete()
       return api.error('You may only run this command in a DM!')
     }
-    const check = await r.table('circles').getAll(msg.author.id, {
-      index: 'owner'
-    }).run()
-    if (check.length >= 1) {
-      return api.error('You already have a circle.')
-    }
-    /**
-     * @type {Guild}
-     */
-    const guild = api.handler.client.guilds.get(SERVER)
+    
     let _words = randomWords({ exactly: 4 })
     for(var i=0; i < _words.length; i++) {
       _words[i] = _words[i].capitalabc();
     }
     const words = _words.join('')
-    const chan = await guild.createChannel(args.name.value.replaceAll(' ', '-'), 'text', [
-      {
-        deny: ['VIEW_CHANNEL'],
-        id: SERVER
-      },
-      {
-        allow: ['VIEW_CHANNEL'],
-        id: msg.author.id
-      }
-    ])
-    await r.table('circles').insert({
-      id: words,
-      key: args.key.value,
-      channel: chan.id,
-      members: [msg.author.id],
-      name: args.name.value,
-      owner: msg.author.id,
-      betrayed: false
+    usersObj[msg.author.id] = {
+      in: true,
+      words: words,
+      stage: 0
+    }
+    const check = await r.table('circles').getAll(msg.author.id, {
+      index: 'owner'
     }).run()
-    chan.setParent(CIRCLES_CATEGORY)
-    chan.setTopic(`ID: ${words}\nKey: ${args.key.value}`)
-    msg.channel.send(`Your circle was created.\nYour circle's ID is: **${words}**.\nYour circle's key is: \`${args.key.value}\`\nGo to your circle at <#${chan.id}>`)
+    if (check.length >= 1) {
+      return api.error('You already have a circle.')
+      usersObj[msg.author.id] = undefined
+    }
+    msg.channel.send('Please type in the desired name for your Circle and press enter.')
   }
 }
