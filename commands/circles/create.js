@@ -58,8 +58,8 @@ module.exports = class CreateCommand extends Command {
           betrayed: false
         }).run()
         chan.setParent(CIRCLES_CATEGORY)
-        chan.setTopic(`ID: ${words}\nKey: ${uo.key}`)
-        msg.channel.send(`Your circle was created.\nYour circle's ID is: **${words}**.\nYour circle's key is: \`${uo.key}\`\nGo to your circle at <#${chan.id}>`)
+        chan.setTopic(`ID: ${uo.words}\nKey: ${uo.key}`)
+        msg.channel.send(`Your circle was created.\nYour circle's ID is: **${uo.words}**.\nYour circle's key is: \`${uo.key}\`\nGo to your circle at <#${chan.id}>`)
         usersObj[msg.author.id] = undefined
       }
     }
