@@ -17,6 +17,9 @@ module.exports = class NicknameCommand extends Command {
   }
   async run(args, msg, api) {
     let member = msg.member
+    if (args.nickname.value.length > 24) {
+      return api.error('Please keep your nickname length under 24 characters.')
+    }
     if (member.nickname) {
       let bracket = member.nickname.lastIndexOf('[')
       if (bracket === -1) {
@@ -24,7 +27,7 @@ module.exports = class NicknameCommand extends Command {
         return api.success(`Your nickname was changed to ${args.nickname.value}`)
       }
       let subbed = member.nickname.substr(bracket)
-      member.setNickname(`${args.nickname.value} ${bracket}`)
+      member.setNickname(`${args.nickname.value} ${subbed}`)
       return api.success(`Your nickname was changed to ${args.nickname.value}`)
     }
   }
