@@ -52,7 +52,7 @@ module.exports = class BetrayCommand extends Command {
     
     let owner = guild.members.get(circle.owner)
     let nums = utils.getNumbers(owner.nickname || `${owner.user.username} [0,0]`)
-    let replaced = utils.replaceNumbers(owner.nickname || `${owner.user.username} [0,0]`, nums[0] + 1, nums[1])
+    let replaced = utils.replaceNumbers(owner.nickname || `${owner.user.username} [0,0]`, 0, nums[1])
     owner.setNickname(replaced)
     
     return api.success('The circle was betrayed.')
