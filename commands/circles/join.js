@@ -18,6 +18,7 @@ module.exports = class JoinCommand extends Command {
         name: 'key',
         type: 'string',
         required: true,
+        multiword: true,
         description: 'The key for the circle'
       }]
     })
