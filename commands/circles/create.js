@@ -26,7 +26,7 @@ module.exports = class CreateCommand extends Command {
       /**
        * @type {Guild}
        */
-      const guild = api.handler.client.guilds.get(SERVER)
+      const guild = msg.client.guilds.get(SERVER)
       let uo = usersObj[msg.author.id]
       if (typeof uo !== 'object' || msg.channel.type !== 'dm') return
       if (uo.stage === 0) {
