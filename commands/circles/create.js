@@ -28,7 +28,7 @@ module.exports = class CreateCommand extends Command {
        */
       const guild = api.handler.client.guilds.get(SERVER)
       let uo = usersObj[msg.author.id]
-      if (typeof uo !== 'object' || !uo || msg.channel.type !== 'dm') return
+      if (typeof uo !== 'object' || msg.channel.type !== 'dm') return
       if (uo.stage === 0) {
         usersObj.name = msg.content
         msg.channel.send('Please type in the desired key for your Circle and press enter.')
@@ -63,7 +63,7 @@ module.exports = class CreateCommand extends Command {
         usersObj[msg.author.id] = undefined
       }
     }
-    handler.client.on('message', createHook)
+    this.handler.client.on('message', global.createHook)
   }
   async run(args, msg, api) {
     if (msg.channel.type !== 'dm') {
