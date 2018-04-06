@@ -24,7 +24,7 @@ module.exports = class HelpCommand extends Command {
     let mods = {}
     let _cmds = {}
     let membed = new RichEmbed()    
-    membed.setTitle(`ℹ \`Help\``).setColor(Colors.blue).setTimestamp().setFooter(`${api.handler.name} ${build.version}`)
+    membed.setTitle(`ℹ \`Help\``).setColor(Colors.blue).setTimestamp().setFooter(`${api.handler.name} ${build.version} | relative`)
     
     for(const mod of modules) {
       let embed = new RichEmbed()
@@ -49,7 +49,7 @@ module.exports = class HelpCommand extends Command {
             cmde.addField('Arguments', argz)
           }
         }
-        cmde.setTimestamp().setFooter(`${api.handler.name} ${build.version}`)
+        cmde.setTimestamp().setFooter(`${api.handler.name} ${build.version} | relative`)
         _cmds[cmd.id] = cmde
         embed.addField(cmd.id, cmd.description)
       }
@@ -58,7 +58,7 @@ module.exports = class HelpCommand extends Command {
         embed.setTitle(`ℹ \`${mod.name}\``)
         embed.setColor(Colors.blue)
         embed.setTimestamp()
-        embed.setFooter(`${api.handler.name} ${build.version}`)
+        embed.setFooter(`${api.handler.name} ${build.version} | relative`)
         mods[mod.id] = embed
       }
     }
@@ -70,7 +70,7 @@ module.exports = class HelpCommand extends Command {
       return _cmds[args.module.value]
     } else {
       return api.error(`The module or command \`${args.module.value}\` doesn't exist, or you do not have permission to view it.\nRun \`${api.prefix}help\` to view all modules.`)
-        .setFooter(`${api.handler.name} ${build.version}`)
+        .setFooter(`${api.handler.name} ${build.version} | relative`)
     }
   }
 }
