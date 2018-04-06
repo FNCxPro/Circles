@@ -7,7 +7,8 @@ const { CommandHandler, Command, Module } = require('./handler'),
       fs = require('fs')
 
 const client = new Discord.Client({
-  fetchAllMembers: true
+  fetchAllMembers: true,
+  disableEveryone: true
 })
 
 /*------------------------------------------*/
