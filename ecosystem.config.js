@@ -2,6 +2,7 @@ module.exports = {
   apps: [{
     name: 'Circles',
     script: 'index.js',
+    instance_var: 'CIRCLES',
     env_production: {
       NODE_ENV: 'production'
     }
