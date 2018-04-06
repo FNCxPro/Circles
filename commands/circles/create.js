@@ -30,7 +30,7 @@ module.exports = class CreateCommand extends Command {
       let uo = usersObj[msg.author.id]
       if (typeof uo !== 'object' || msg.channel.type !== 'dm') return
       if (uo.stage === 0) {
-        usersObj.name = msg.content
+        uo.name = msg.content
         msg.channel.send('Please type in the desired key for your Circle and press enter.')
         uo.stage = 1
         usersObj[msg.author.id] = uo
