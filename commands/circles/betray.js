@@ -2,6 +2,8 @@ const { Command } = require('../../handler')
 const r = require('../../db')
 const SERVER = '431864638385291264'
 
+const utils = require('../../utils')
+
 module.exports = class BetrayCommand extends Command {
   constructor() {
     super('betray', {
