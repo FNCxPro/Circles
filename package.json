@@ -1,9 +1,9 @@
 {
-  "name": "spokes",
+  "name": "circles",
   "version": "0.1.0",
-  "description": "An alternative way to power your Discord bot with Node.JS and discord.js.",
+  "description": "An r/circleoftrust clone",
   "main": "index.js",
-  "repository": "https://github.com/FNCxPro/Spokes",
+  "repository": "https://github.com/FNCxPro/Circles",
   "author": "Seth Stephens <relative@airmail.cc>",
   "license": "MIT",
   "scripts": {
