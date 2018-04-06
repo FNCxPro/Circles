@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": "https://github.com/FNCxPro/Circles",
   "author": "Seth Stephens <relative@airmail.cc>",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js"
   },
