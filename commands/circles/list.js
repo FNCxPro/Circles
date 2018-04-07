@@ -1,5 +1,5 @@
 const { Command } = require('../../handler')
-const r = require('../../db')
+const db = require('../../db')
 const Discord = require('discord.js')
 
 module.exports = class ListCommand extends Command {
@@ -12,7 +12,7 @@ module.exports = class ListCommand extends Command {
     })
   }
   async run(args, msg, api) {
-    let circles = await r.table('circles').run()
+    let circles = await db.r.table('circles').run()
     let buf = '⛔ = Betrayed\n--==: **Circles** :==--\n'
     circles.forEach((circle) => {
       let owner = msg.guild.members.get(circle.owner)
