@@ -3,10 +3,10 @@
     "name": "Circles",
     "owner": "346676896794279937",
     "prefix": "c.",
-    "token": "change this in prod."
+    "token": "Token"
   },
   "rethink": {
-    "host": "192.168.7.211",
+    "host": "127.0.0.1",
     "username": "admin",
     "password": "nah",
     "db": "circles"
@@ -20,10 +20,16 @@
       "black": "#1E1E1E"
     },
     "emoji": {
-      "check": "<:check:431910504433319964>",
-      "cross": "<:xmark:431910517481799690>",
-      "empty": "<:empty:431910534334644236>"
+      "check": "<:check:404568151783637002>",
+      "cross": "<:xmark:404568151842357248>",
+      "empty": "<:empty:404568151712333836>"
     }
+  },
+  "ids": {
+    "server": "431864638385291264",
+    "category": "431866855792181248",
+    "betrayed": "431868770760392704",
+    "logchannel": "431900922604421140"
   },
   "modules": [
     {
