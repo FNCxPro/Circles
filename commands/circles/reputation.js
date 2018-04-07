@@ -1,4 +1,5 @@
 const { Command } = require('../../handler')
+const { Colors } = require('../../handler/Constants')
 const db = require('../../db')
 module.exports = class ReputationCommand extends Command {
   constructor() {
@@ -27,6 +28,15 @@ module.exports = class ReputationCommand extends Command {
     })
     embed.setAuthor(`${user.username}#${user.discriminator}`, user.displayAvatarURL)
     embed.setDescription(`Reputation for user <@${user.id}>`)
+    embed.setColor(Colors.blue)
+    if (duser.blacklisted) {
+      embed.addField('⚠ WARNING', 'This user is blacklisted from using the bot\nHe should not be trusted!')
+      embed.setColor(Colors.red)
+    }
+    if (duser.betrayed > 0) {
+      embed.addField('⚠ WARNING', 'This user has betrayed before!')
+      embed.setColor(Colors.red)
+    }
     embed.addField('Circles Joined', joinedFinal.toString())
     embed.addField('Circle Members', duser.members)
     embed.addField('Betrayed', duser.betrayed)
