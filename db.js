@@ -323,6 +323,12 @@ class Database {
     return typeof f !== 'undefined'
   }
 
+  async deleteCircle(id) {
+    if (circleCache[id]) circleCache[id] = undefined
+    await this.r.table('circles').get(id).delete().run()
+    return true
+  }
+
 }
 
 module.exports = new Database(r)
