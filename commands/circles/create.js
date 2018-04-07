@@ -31,6 +31,13 @@ module.exports = class CreateCommand extends Command {
       const guild = msg.client.guilds.get(config.get('ids.server'))
       let uo = usersObj[msg.author.id]
       if (typeof uo !== 'object' || msg.channel.type !== 'dm') return
+      let userCircles = await db.r.table('circles').getAll(msg.author.id, {
+        index: 'owner'
+      }).run()
+      if (userCircles.length > 0) {
+        usersObj[msg.author.id] = undefined
+        return msg.reply('You already have a circle, nice try.\n@relative and tell me how u did it <3')
+      }
       if (uo.stage === 0) {
         uo.name = msg.content
         msg.channel.send('Please type in the desired key for your Circle and press enter.')
