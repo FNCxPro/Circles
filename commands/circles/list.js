@@ -23,8 +23,8 @@ module.exports = class ListCommand extends Command {
     let buf = '⛔ = Betrayed\n--==: **Circles** :==--\n'
     if (args.mode.value == 'members') {
       circles.sort(function(a, b){
-        let keyA = a.members.length
-            keyB = b.members.length
+        let keyA = a.members.length || 0
+        let keyB = b.members.length || 0
         if(keyA < keyB) return -1
         if(keyA > keyB) return 1
         return 0
