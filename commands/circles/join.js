@@ -1,8 +1,8 @@
 const { Command } = require('../../handler')
 const { RichEmbed } = require('discord.js')
 const { Colors } = require('../../handler/Constants')
-const r = require('../../db')
-const SERVER = '431864638385291264'
+const db = require('../../db')
+const config = require('config')
 const utils = require('../../utils')
 
 module.exports = class JoinCommand extends Command {
@@ -31,38 +31,22 @@ module.exports = class JoinCommand extends Command {
       msg.delete()
       return api.error('This command can only be run in a DM with the bot.')
     }
-    const circle = await r.table('circles').get(args.id.value).run()
-    if (typeof circle === 'undefined' || !circle) {
-      return api.error('That circle doesn\'t exist.')
-    }
-    if (circle.members.indexOf(msg.author.id) !== -1) {
-      return api.error('You have already joined that circle.')
-    }
-    if (circle.betrayed) {
-      return api.error('That circle has been betrayed.')
-    }
-    if (args.key.value !== circle.key) {
-      return api.error('The key you provided is invalid.')
-    }
-    let members = circle.members
-    members.push(msg.author.id)
-    await r.table('circles').get(args.id.value).update({
-      members
-    })
-    let channel = api.handler.client.guilds.get(SERVER).channels.get(circle.channel)
+    let guild = api.handler.client.guilds.get(config.get('ids.server'))
+
+    const circle = await db.getCircle(args.id.value)
+    if (!circle) return api.error('That circle doesn\'t exist.')
+    if (args.key.value !== circle.key) return api.error('The key you provided is invalid.')
+    if (circle.members.indexOf(msg.author.id) !== -1) return api.error('You have already joined that circle.')
+    if (circle.betrayed) return api.error('That circle has been betrayed.')
+    circle.members.push(msg.author.id)
+    await circle.push()
+    const channel = guild.channels.get(circle.channel)
     await channel.overwritePermissions(msg.author, {
       VIEW_CHANNEL: true
     })
-    let guild = api.handler.client.guilds.get(SERVER)
-    let member = guild.members.get(msg.author.id)
-    let nums = utils.getNumbers(member.nickname || `${member.user.username} [0,0]`)
-    let replaced = utils.replaceNumbers(member.nickname || `${member.user.username} [0,0]`, nums[0], nums[1] + 1)
-    member.setNickname(replaced)
-
-    let owner = guild.members.get(circle.owner)
-    let numsOwner = utils.getNumbers(owner.nickname || `${owner.user.username} [0,0]`)
-    let replacedOwner = utils.replaceNumbers(owner.nickname || `${owner.user.username} [0,0]`, numsOwner[0] + 1, numsOwner[1])
-    owner.setNickname(replacedOwner)
+    let owner = await db.getUser(circle.owner)
+    owner.members = owner.members + 1
+    await owner.push()
     const embed = new RichEmbed()
     embed.setColor(Colors.green).setTitle('Circle Joined')
     embed.setAuthor(`${msg.author.username}#${msg.author.discriminator} (${msg.author.id})`, msg.author.displayAvatarURL)
