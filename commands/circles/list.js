@@ -12,7 +12,8 @@ module.exports = class ListCommand extends Command {
         name: 'mode',
         type: 'string',
         required: false,
-        default: 'default'
+        default: 'default',
+        description: 'default - default sorting, members - sort by member count'
       }],
       ownerOnly: false
     })
@@ -20,7 +21,7 @@ module.exports = class ListCommand extends Command {
   async run(args, msg, api) {
     let circles = await db.r.table('circles').run()
     let buf = '⛔ = Betrayed\n--==: **Circles** :==--\n'
-    if (mode == 'members') {
+    if (args.mode.value == 'members') {
       circles.sort(function(a, b){
         let keyA = a.members.length
             keyB = b.members.length
